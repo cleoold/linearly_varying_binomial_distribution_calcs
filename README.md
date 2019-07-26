@@ -4,6 +4,8 @@
 
 ### Description of the math
 
+* Please open this readme file in a viewer that supports latex equations if you want to see them.
+
 The cardpool of the game looks like:
 
 One can flip a card. there is a probability (here say 0.02) to have a good one at the beginning.
