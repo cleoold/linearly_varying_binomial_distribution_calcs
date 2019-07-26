@@ -8,7 +8,6 @@
 
 #include <math.h>
 #include "prob_func.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 
@@ -130,6 +129,7 @@ probability **_have_m_successes_within_n_attempts_dist(distr *s, int n, int m)
 
 probability have_m_successes_within_n_attempts(distr *s, int n, int m)
 {
+    if (n < 1) return 0.0;
     probability **res_arr = _have_m_successes_within_n_attempts_dist(s, n, m);
     probability res = _sum_of_array(res_arr[m], s->max_times + 2);
     _deallocate_2d_array(res_arr, m + 2);
@@ -172,7 +172,9 @@ count have_m_successes_within_n_attempts_E(distr *s, int n)
 
 probability no_special_success_within_n_attempts(distr *s, int n, probability p)
 {
+    if (n < 1) return 1.0;
     probability *q = malloc(sizeof(probability) * (s->max_times + 2));
+    for (int j = 0; j < s->max_times + 2; q[j++] = 0.0);
     q[1] = 1.0;
     for (int j = 0; j < n; ++j)
     {
