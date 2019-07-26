@@ -15,12 +15,13 @@
 #include "prob_func.h"
 
 #define absval(a) ((a) > 0 ? (a) : -(a))
-#define eq(a, b) absval((a) - (b)) < 0.0001
+#define eq(a, b) (absval((a) - (b)) <= 0.00001)
 
 int main(int argc, char **argv)
 {
     puts("if any assertion fails, try reopen this file for few times to see"
-            " if the problem persists. If it does, then the code is wrong.");
+            " if the problem persists. If it does, check memory allocation,"
+            " or the code is wrong.");
 
     distr x = create_model(0.02, 0.02, 50);
 
@@ -77,6 +78,11 @@ int main(int argc, char **argv)
     assert(eq(have_special_success_within_n_attempts(&x, 1, 0.5), 0.01));
     assert(eq(have_special_success_within_n_attempts(&x, 50, 0.5), 0.394994));
     assert(eq(have_special_success_within_n_attempts(&x, 150, 0.5), 0.9124559));
+
+    assert(eq(no_special_success_within_n_attempts(&x, 0, 0.5), 1.0));
+    assert(eq(no_special_success_within_n_attempts(&x, 1, 0.5), 0.99));
+    assert(eq(no_special_success_within_n_attempts(&x, 50, 0.5), 0.605006));
+    assert(eq(no_special_success_within_n_attempts(&x, 150, 0.5), 0.087544));
 
     assert(eq(have_special_success_within_n_attempts_E(&x, 0.5), 69.18911));
 
