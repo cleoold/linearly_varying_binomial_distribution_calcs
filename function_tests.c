@@ -17,7 +17,7 @@
 #define absval(a) ((a) > 0 ? (a) : -(a))
 #define eq(a, b) (absval((a) - (b)) <= 0.00001)
 
-int main(int argc, char **argv)
+int tmain(int argc, char **argv)
 {
     puts("if any assertion fails, try reopen this file for few times to see"
             " if the problem persists. If it does, check memory allocation,"

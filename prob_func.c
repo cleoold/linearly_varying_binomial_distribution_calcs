@@ -18,8 +18,8 @@ distr create_model( probability base_prob_of_success,
     distr res = {   base_prob_of_success,
                     additional_prob_of_success,
                     threshold_to_activate_addition };
-    res.max_times = (int)((1.0 - base_prob_of_success) / additional_prob_of_success
-                            + threshold_to_activate_addition);
+    res.max_times = (int)(ceil(((1.0 - base_prob_of_success) / additional_prob_of_success
+                            + threshold_to_activate_addition)));
     return res;
 }
 
