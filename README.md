@@ -2,6 +2,12 @@
 * create probability struct `struct distr`
 * do calculations
 
+### function_tests
+* used to check the correctness of this library
+
+### consoleapp
+* a sample calculator that uses this distribution to do calculations
+
 ### Description of the math
 
 * Please open this readme file in a viewer that supports latex equations if you want to see them.

@@ -10,6 +10,8 @@
 #include "prob_func.h"
 #include <stdlib.h>
 
+#define CEIL(x) ((int)(x) + ((x) > (int)(x)))
+
 
 distr create_model( probability base_prob_of_success,
                     probability additional_prob_of_success,
@@ -18,8 +20,8 @@ distr create_model( probability base_prob_of_success,
     distr res = {   base_prob_of_success,
                     additional_prob_of_success,
                     threshold_to_activate_addition };
-    res.max_times = (int)(ceil(((1.0 - base_prob_of_success) / additional_prob_of_success
-                            + threshold_to_activate_addition)));
+    res.max_times = CEIL((1.0 - base_prob_of_success) / additional_prob_of_success
+                            + threshold_to_activate_addition);
     return res;
 }
 
@@ -126,6 +128,10 @@ probability **_have_m_successes_within_n_attempts_dist(distr *s, int n, int m)
     return last;
 }
 
+// TODO: create an object to store the array [last], so that the below three 
+//       functions will be called with the existing array
+// NOW: if below three functions are all called at once, the same computation
+//      will be repeated three times
 
 probability have_m_successes_within_n_attempts(distr *s, int n, int m)
 {
