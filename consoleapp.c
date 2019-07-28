@@ -26,6 +26,7 @@
 
 #define CHAR_IS_EMPTY(STR) ((STR) == '\0' || (STR) == '\n')
 //#define INPUT_IS_TOO_LONG(STR) !strchr((STR), '\n')
+#define ISDIGIT(CH) ((CH) >= '0' && (CH) <= '9')
 
 #define FLUSH_STDIN()                                    \
     do                                                   \
@@ -72,9 +73,9 @@
 
 GENERIC_READ(char, "%c", 1, 1)
 
-GENERIC_READ(int, "%d", isdigit(*this), res > 0)
+GENERIC_READ(int, "%d", ISDIGIT(*this), res > 0)
 // cuts off contents after the second period, if any
-GENERIC_READ(probability, "%lf", isdigit(*this) || (*this) == '.', 
+GENERIC_READ(probability, "%lf", ISDIGIT(*this) || (*this) == '.', 
                                     res > 0.0 && res < 1.0)
 
 // repeated dialogs
