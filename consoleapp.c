@@ -97,7 +97,7 @@ distr acquire_distribution(void)
 
     puts("Enter here the starting probability:");
     probability base = read_probability();
-    puts("After how many successive failures will the chance starts to increase?");
+    puts("After how many successive failures will the chance start to increase?");
     int threshold = read_int();
     printf("What is the constant to add to the probability after %d successive failures?"
             " So that the chance will increase failure-by-failure.\n", threshold);
@@ -146,12 +146,12 @@ void print_have_variable_successes_within_attempts(distr *s)
     int m = read_int();
     dialog_loading();
 
-    printf( "\n    P of having m or more successes (CDF): %.08lf\n"
-            "    P of having m success(es)              %.08lf\n"
+    printf( "\n    P of having %d or more successes (CDF): %.08lf\n"
+            "    P of having %d success(es)              %.08lf\n"
             "    average success count after %d-th:     %.08lf\n\n",
             // see function in prob.func.c
-            have_m_or_more_successes_within_n_attempts(s, n, m),
-            have_m_successes_within_n_attempts(s, n, m),
+            m, have_m_or_more_successes_within_n_attempts(s, n, m),
+            m, have_m_successes_within_n_attempts(s, n, m),
             n, have_m_successes_within_n_attempts_E(s, n));
 }
 
