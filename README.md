@@ -1,5 +1,5 @@
 ### .h
-* create probability struct `struct distr`
+* create probability struct `struct LVBdistribution`
 * do calculations
 
 ### function_tests
@@ -21,9 +21,9 @@ For example, one tried 52 times and there have been no successes. At this point 
 
 * the distribution:
     ```c
-    struct distr create_model( probability base_prob_of_success, // = 0.02
-                               probability additional_prob_of_success, // = 0.02
-                               int threshold_to_activate_addition); // = 50
+    struct LVBdistribution create_model(    probability base_prob_of_success, // = 0.02
+                                            probability additional_prob_of_success, // = 0.02
+                                            int threshold_to_activate_addition); // = 50
     ```
 
 * The (conditional) probability of success at n given that one fails for n-1 times:

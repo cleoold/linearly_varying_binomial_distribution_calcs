@@ -11,36 +11,38 @@
 #include <stdlib.h>
 
 #define CEIL(x) ((int)(x) + ((x) > (int)(x)))
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 
-distr create_model( probability base_prob_of_success,
+LVBdistribution create_model( probability base_prob_of_success,
                     probability additional_prob_of_success,
                     int threshold_to_activate_addition)
 {
-    distr res = {   base_prob_of_success,
-                    additional_prob_of_success,
-                    threshold_to_activate_addition };
+    LVBdistribution res = { base_prob_of_success,
+                            additional_prob_of_success,
+                            threshold_to_activate_addition };
     res.max_times = CEIL((1.0 - base_prob_of_success) / additional_prob_of_success
                             + threshold_to_activate_addition);
     return res;
 }
 
 
-probability have_success_given_no_successes_before(distr *s, int n)
+probability have_success_given_no_successes_before(LVBdistribution *s, int n)
 {
     if (n < 1) return 0.0;
-    return fmin(1.0, 
-        s->base_prob + fmax(0, s->additional_prob * (n - s->threshold)) );
+    return MIN(1.0, 
+        s->base_prob + MAX(0, s->additional_prob * (n - s->threshold)) );
 }
 
 
-probability no_success_given_no_successes_before(distr *s, int n)
+probability no_success_given_no_successes_before(LVBdistribution *s, int n)
 {
     return 1.0 - have_success_given_no_successes_before(s, n);
 }
 
 
-probability have_first_success_at_n(distr *s, int n)
+probability have_first_success_at_n(LVBdistribution *s, int n)
 {
     probability res = have_success_given_no_successes_before(s, n);
     for (int j = 1; j < n; ++j)
@@ -49,7 +51,7 @@ probability have_first_success_at_n(distr *s, int n)
 }
 
 
-count have_first_success_at_n_E(distr *s)
+count have_first_success_at_n_E(LVBdistribution *s)
 {
     count res = 0.0;
     for (int j = 1; j <= s->max_times; ++j)
@@ -58,7 +60,7 @@ count have_first_success_at_n_E(distr *s)
 }
 
 
-probability no_success_within_n_attempts(distr *s, int n)
+probability no_success_within_n_attempts(LVBdistribution *s, int n)
 {
     probability res = 1.0;
     for (int j = 1; j <= n; ++j)
@@ -67,7 +69,7 @@ probability no_success_within_n_attempts(distr *s, int n)
 }
 
 
-probability have_success_within_n_attempts(distr *s, int n)
+probability have_success_within_n_attempts(LVBdistribution *s, int n)
 {
     return 1.0 - no_success_within_n_attempts(s, n);
 }
@@ -107,7 +109,7 @@ static number _sum_of_array(number *arr, int len)
 }
 
 
-probability **_have_m_successes_within_n_attempts_dist(distr *s, int n, int m)
+probability **_have_m_successes_within_n_attempts_dist(LVBdistribution *s, int n, int m)
 {
     probability **last = _create_2d_array(m + 2, s->max_times + 2);
     last[0][1] = 1.0;
@@ -133,7 +135,7 @@ probability **_have_m_successes_within_n_attempts_dist(distr *s, int n, int m)
 // NOW: if below three functions are all called at once, the same computation
 //      will be repeated three times
 
-probability have_m_successes_within_n_attempts(distr *s, int n, int m)
+probability have_m_successes_within_n_attempts(LVBdistribution *s, int n, int m)
 {
     if (n < 1) return 0.0;
     probability **res_arr = _have_m_successes_within_n_attempts_dist(s, n, m);
@@ -143,7 +145,7 @@ probability have_m_successes_within_n_attempts(distr *s, int n, int m)
 }
 
 
-probability have_m_or_more_successes_within_n_attempts(distr *s, int n, int m)
+probability have_m_or_more_successes_within_n_attempts(LVBdistribution *s, int n, int m)
 {
     probability **res_arr = _have_m_successes_within_n_attempts_dist(s, n, n);
     probability res;
@@ -165,7 +167,7 @@ probability have_m_or_more_successes_within_n_attempts(distr *s, int n, int m)
 }
 
 
-count have_m_successes_within_n_attempts_E(distr *s, int n)
+count have_m_successes_within_n_attempts_E(LVBdistribution *s, int n)
 {
     probability **res_arr = _have_m_successes_within_n_attempts_dist(s, n, n);
     count res = 0.0;
@@ -176,7 +178,7 @@ count have_m_successes_within_n_attempts_E(distr *s, int n)
 }
 
 
-probability no_special_success_within_n_attempts(distr *s, int n, probability p)
+probability no_special_success_within_n_attempts(LVBdistribution *s, int n, probability p)
 {
     if (n < 1) return 1.0;
     probability *q = malloc(sizeof(probability) * (s->max_times + 2));
@@ -199,13 +201,13 @@ probability no_special_success_within_n_attempts(distr *s, int n, probability p)
 }
 
 
-probability have_special_success_within_n_attempts(distr *s, int n, probability p)
+probability have_special_success_within_n_attempts(LVBdistribution *s, int n, probability p)
 {
     return 1.0 - no_special_success_within_n_attempts(s, n, p);
 }
 
 
-count have_special_success_within_n_attempts_E(distr *s, probability p)
+count have_special_success_within_n_attempts_E(LVBdistribution *s, probability p)
 {
     count original = have_first_success_at_n_E(s);
     return (count)original / (probability)p;

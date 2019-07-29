@@ -92,7 +92,7 @@ GENERIC_READ(probability, "%lf", ISDIGIT(*this) || (*this) == '.',
 
 
 
-distr acquire_distribution(void)
+LVBdistribution acquire_distribution(void)
 {
     puts("To use the calculator, enter the information below");
 
@@ -103,7 +103,7 @@ distr acquire_distribution(void)
     printf("What is the constant to add to the probability after %d successive failures?"
             " So that the chance will increase failure-by-failure.\n", threshold);
     probability constant = read_probability();
-    distr res = create_model(base, constant, threshold);
+    LVBdistribution res = create_model(base, constant, threshold);
     printf( "\n    normal probability:               %.08lf\n"
             "    increased probability:            %.08lf\n"
             "    minimum attempts before increase: %d\n"
@@ -116,7 +116,7 @@ distr acquire_distribution(void)
 }
 
 
-void print_average_waiting_time(distr *s, count *distr_E) // detects any pre-calculated E
+void print_average_waiting_time(LVBdistribution *s, count *distr_E) // detects any pre-calculated E
 {
     dialog_loading();
     if (*distr_E == INVALID_N)
@@ -126,7 +126,7 @@ void print_average_waiting_time(distr *s, count *distr_E) // detects any pre-cal
 }
 
 
-void print_have_success_within_attempts(distr *s)
+void print_have_success_within_attempts(LVBdistribution *s)
 {
     puts("How many attempts does one make?");
     int n = read_int();
@@ -139,7 +139,7 @@ void print_have_success_within_attempts(distr *s)
 }
 
 
-void print_have_variable_successes_within_attempts(distr *s)
+void print_have_variable_successes_within_attempts(LVBdistribution *s)
 {
     puts("How many attempts does one make?");
     int n = read_int();
@@ -157,7 +157,7 @@ void print_have_variable_successes_within_attempts(distr *s)
 }
 
 
-void print_have_special_success_within_attempts(distr *s, count * distr_E)
+void print_have_special_success_within_attempts(LVBdistribution *s, count * distr_E)
 {
     puts("Given an success event has occurred, a special success will occur at a chance p:");
     probability p = read_probability();
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
 {
     displayed_title();
     
-    distr my_dist = acquire_distribution();
+    LVBdistribution my_dist = acquire_distribution();
     count distr_E = INVALID_N;
     displayed_help();
     while (1)
