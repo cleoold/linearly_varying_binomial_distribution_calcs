@@ -1,3 +1,5 @@
+[![Build Status](https://api.cirrus-ci.com/github/cleoold/linearly_varying_binomial_distribution_calcs.svg)](https://cirrus-ci.com/github/cleoold/linearly_varying_binomial_distribution_calcs)
+
 ### .h
 * create probability struct `struct LVBdistribution`
 * do calculations
