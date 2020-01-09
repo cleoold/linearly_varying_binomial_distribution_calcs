@@ -15,6 +15,7 @@
 
 // includes
 #include <stdio.h>
+#include <string.h>
 #include "prob_func.h"
 
 // common settings
