@@ -1,0 +1,5 @@
+container:
+  image: gcc:latest
+task:
+  script: make -f Makefile_gcc
+  tests_script: ./function_tests

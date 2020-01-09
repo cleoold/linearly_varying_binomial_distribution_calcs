@@ -1,0 +1,12 @@
+output = function_tests consoleapp
+
+all : $(output)
+
+function_tests : function_tests.c prob_func.c prob_func.h
+	gcc function_tests.c prob_func.c -o function_tests
+
+consoleapp : consoleapp.c prob_func.c prob_func.h
+	gcc consoleapp.c prob_func.c -o consoleapp
+
+reset :
+	rm -f $(output)
