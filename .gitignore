@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# output
+consoleapp.exe
+function_tests.exe
+consoleapp
+function_tests

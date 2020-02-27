@@ -15,6 +15,7 @@
 
 // includes
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "prob_func.h"
 
@@ -47,7 +48,8 @@
         {                                                                   \
             valid = 1;                                                      \
             printf("Your input: ");                                         \
-            fgets(buf, MAX_INPUT_LEN+2, stdin);                             \
+            if (!fgets(buf, MAX_INPUT_LEN+2, stdin))                        \
+                exit(0);                                                    \
             for (char *this = buf; !CHAR_IS_EMPTY(*this); ++this)           \
                 if (!(COND_CHAR)) valid = 0;                                \
                                                                             \
@@ -88,7 +90,8 @@ GENERIC_READ(probability, "%lf", ISDIGIT(*this) || (*this) == '.',
     puts(   "\n  1 - compute the average waiting attempts before success\n" \
             "  2 - compute the chance of success at N attempts\n"           \
             "  3 - compute the chance of M successes at N attempts\n"       \
-            "  4 - compute the chance of 'special' success at N attempts\n")  
+            "  4 - compute the chance of 'special' success at N attempts\n" \
+            "  q - quit")  
 
 
 
@@ -200,6 +203,8 @@ int main(int argc, char** argv)
         case ('4'):
             print_have_special_success_within_attempts(&my_dist, &distr_E);
             break;
+        case ('q'):
+            return 0;
         default:
             puts("That option seems not valid.");
             break;
