@@ -91,3 +91,17 @@ $$
         P_{\textrm{spec}}(n) &= 1-\sum_{\beta=1}^{99}dp(n+1,\beta)
     \end{aligned}
     $$
+
+### Use
+Windows users with VC compiler can compile the console app for playing
+```bash
+% make -f Makefile
+```
+I now do not have a VC compiler but I have wsl, so I can play the console app with gcc
+```bash
+% make -f Makefile_gcc
+```
+Some people are bored and this can make a shared .so file for linux and the consoleapp
+```bash
+% make -f Makefile_gcc_shared
+```
