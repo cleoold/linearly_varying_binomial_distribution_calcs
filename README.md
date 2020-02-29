@@ -27,6 +27,7 @@ For example, one tried 52 times and there have been no successes. At this point 
                                             probability additional_prob_of_success, // = 0.02
                                             int threshold_to_activate_addition); // = 50
     ```
+    Note if `additional_prob_of_success` is 0 then it does not make sense as the distribution will fall back to binomial distribution (The current algorithm does not support this, please feel free to implement)
 
 * The (conditional) probability of success at n given that one fails for n-1 times:
     ```c

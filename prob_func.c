@@ -6,19 +6,60 @@
 */
 
 
-#include <math.h>
 #include "prob_func.h"
+#include <assert.h>
 #include <stdlib.h>
+
+/** utility */
 
 #define CEIL(x) ((int)(x) + ((x) > (int)(x)))
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 
+
+static number **_create_2d_array(int outer, int inner)
+{
+    // and sets all values to 0
+    number **arr;
+    arr = malloc(sizeof(*arr) * outer);
+    for (int j = 0; j < outer; ++j)
+    {
+        arr[j] = malloc(sizeof(*arr[j]) * inner);
+        /* if (!arr[j]) 
+        {
+            puts("possible memory error.");
+            break;
+        } */
+        for (int k = 0; k < inner; arr[j][k++] = 0.0);
+    }
+    return arr;
+}
+
+
+static void _deallocate_2d_array(number **arr, int outer)
+{
+    for (int j = 0; j < outer; free(arr[j++]));
+    free(arr);
+}
+
+
+static number _sum_of_array(number *arr, int len)
+{
+    number res = 0.0;
+    for (int j = 0; j < len; res += arr[j++]);
+    return res;
+}
+
+
+/** exports */
+
 LVBdistribution create_model( probability base_prob_of_success,
                     probability additional_prob_of_success,
                     int threshold_to_activate_addition)
 {
+    assert(additional_prob_of_success != 0.0);
+
     LVBdistribution res = { base_prob_of_success,
                             additional_prob_of_success,
                             threshold_to_activate_addition };
@@ -72,40 +113,6 @@ probability no_success_within_n_attempts(LVBdistribution *s, int n)
 probability have_success_within_n_attempts(LVBdistribution *s, int n)
 {
     return 1.0 - no_success_within_n_attempts(s, n);
-}
-
-
-static number **_create_2d_array(int outer, int inner)
-{
-    // and sets all values to 0
-    number **arr;
-    arr = malloc(sizeof(*arr) * outer);
-    for (int j = 0; j < outer; ++j)
-    {
-        arr[j] = malloc(sizeof(*arr[j]) * inner);
-        /* if (!arr[j]) 
-        {
-            puts("可能存在内存错误 / possible memory error.");
-            break;
-        } */
-        for (int k = 0; k < inner; arr[j][k++] = 0.0);
-    }
-    return arr;
-}
-
-
-static void _deallocate_2d_array(number **arr, int outer)
-{
-    for (int j = 0; j < outer; free(arr[j++]));
-    free(arr);
-}
-
-
-static number _sum_of_array(number *arr, int len)
-{
-    number res = 0.0;
-    for (int j = 0; j < len; res += arr[j++]);
-    return res;
 }
 
 

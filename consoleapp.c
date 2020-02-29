@@ -38,8 +38,8 @@
     } while (0)
 
 
-#define GENERIC_READ(TYPE, FORMAT_STR, COND_CHAR, COND_RES)                 \
-    TYPE read_##TYPE(void)                                                  \
+#define GENERIC_READ(TYPE, NAME, FORMAT_STR, COND_CHAR, COND_RES)           \
+    TYPE read_##TYPE##NAME(void)                                           \
     {                                                                       \
         TYPE res;                                                           \
         boolean valid;                                                      \
@@ -74,12 +74,14 @@
     }                                    
 
 
-GENERIC_READ(char, "%c", 1, 1)
+GENERIC_READ(char, , "%c", 1, 1)
 
-GENERIC_READ(int, "%d", ISDIGIT(*this), res > 0)
+GENERIC_READ(int, , "%d", ISDIGIT(*this), res > 0)
 // cuts off contents after the second period, if any
-GENERIC_READ(probability, "%lf", ISDIGIT(*this) || (*this) == '.', 
+GENERIC_READ(probability, , "%lf", ISDIGIT(*this) || (*this) == '.', 
                                     res > 0.0 && res < 1.0)
+GENERIC_READ(probability, _zeroable, "%lf", ISDIGIT(*this) || (*this) == '.', 
+                                    res >= 0.0 && res < 1.0)
 
 // repeated dialogs
 #define dialog_loading()                                                    \
@@ -91,7 +93,20 @@ GENERIC_READ(probability, "%lf", ISDIGIT(*this) || (*this) == '.',
             "  2 - compute the chance of success at N attempts\n"           \
             "  3 - compute the chance of M successes at N attempts\n"       \
             "  4 - compute the chance of 'special' success at N attempts\n" \
-            "  q - quit")  
+            "  h - see this menu again\n"                                   \
+            "                                q - quit")
+
+static void displayed_dist(LVBdistribution *dist)
+{
+    printf( "\n    normal probability:               %.08lf\n"
+            "    increased probability:            %.08lf\n"
+            "    minimum attempts before increase: %d\n"
+            "    maximum attempts to ensure:       %d\n",
+            dist->base_prob, 
+            dist->additional_prob, 
+            dist->threshold, 
+            dist->max_times);
+}
 
 
 
@@ -101,21 +116,13 @@ LVBdistribution acquire_distribution(void)
     puts("To use the calculator, enter the information below");
 
     puts("Enter here the starting probability:");
-    probability base = read_probability();
+    probability base = read_probability_zeroable();
     puts("After how many successive failures will the chance start to increase?");
     int threshold = read_int();
     printf("What is the constant to add to the probability after %d successive failures?"
             " So that the chance will increase failure-by-failure.\n", threshold);
     probability constant = read_probability();
     LVBdistribution res = create_model(base, constant, threshold);
-    printf( "\n    normal probability:               %.08lf\n"
-            "    increased probability:            %.08lf\n"
-            "    minimum attempts before increase: %d\n"
-            "    maximum attempts to ensure:       %d\n",
-            base, 
-            constant, 
-            threshold, 
-            res.max_times);
     return res;
 }
 
@@ -185,6 +192,7 @@ int main(int argc, char** argv)
     
     LVBdistribution my_dist = acquire_distribution();
     count distr_E = INVALID_N;
+    displayed_dist(&my_dist);
     displayed_help();
     while (1)
     {
@@ -202,6 +210,10 @@ int main(int argc, char** argv)
             break;
         case ('4'):
             print_have_special_success_within_attempts(&my_dist, &distr_E);
+            break;
+        case ('h'):
+            displayed_dist(&my_dist);
+            displayed_help();
             break;
         case ('q'):
             return 0;
