@@ -17,7 +17,7 @@
 The cardpool of the game looks like:
 
 One can flip a card. there is a probability (here say 0.02) to have a good one at the beginning.
-* If one does not have the good one for some attempts in a row, the constant (here say 0.02) will be added to the existing probability (so that the chance of having the good one is increasing) until one finally has the good card, at which point the chance will reset to the original one.
+* If one does not have the good one for 50 attempts in a row, the constant (here say 0.02) will be added to the existing probability (so that the chance of having the good one is increasing) until one finally has the good card, at which point the chance will reset to the original one.
 
 For example, one tried 52 times and there have been no successes. At this point his/her chance to success for the next time will be 0.08. If the 53-rd try is a success, then the chance for the 54-th try will be reset to 0.02, otherwise the chance becomes 0.10. Also the maximum number of tries allowed here is calculated 99, where the chance is 1.
 
