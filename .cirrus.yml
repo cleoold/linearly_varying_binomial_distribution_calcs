@@ -1,5 +1,5 @@
 container:
   image: gcc:latest
 task:
-  script: make -f Makefile_gcc
+  script: make
   tests_script: ./function_tests

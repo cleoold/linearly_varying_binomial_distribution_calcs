@@ -1,6 +1,7 @@
 CXX = gcc
 
-src = prob_func.c consoleapp.c function_tests.c
+libsrc = prob_func.c
+libhead = prob_func.h
 odir = out
 exec = $(odir)/function_tests $(odir)/consoleapp
 obj = $(odir)/prob_func.o
@@ -11,16 +12,16 @@ all : $(odir) $(obj) $(lib) $(exec)
 $(odir) :
 	mkdir -p $(odir)
 
-$(odir)/prob_func.o : prob_func.c
-	$(CXX) -o $@ -c prob_func.c -fPIC
+$(obj) : $(libsrc) $(libhead)
+	$(CXX) -o $@ -c $< -fPIC
 
-$(odir)/libprob_func.so: $(odir)/prob_func.o
+$(lib): $(obj)
 	$(CXX) -shared -o $@ $<
 
-$(odir)/consoleapp: consoleapp.c $(odir)/libprob_func.so prob_func.h
+$(odir)/consoleapp: consoleapp.c $(lib) $(libhead)
 	$(CXX) -o $@ $< -L./$(odir) -Wl,-rpath=. -lprob_func
 
-$(odir)/function_tests: function_tests.c $(odir)/libprob_func.so prob_func.h
+$(odir)/function_tests: function_tests.c $(lib) $(libhead)
 	$(CXX) -o $@ $< -L./$(odir) -Wl,-rpath=. -lprob_func
 
 reset :

@@ -1,15 +1,16 @@
-output = function_tests.exe consoleapp.exe
+CXX = gcc -Wall
+exec = function_tests consoleapp
 
-all : $(output) clean
+libdef = prob_func.c
+libhead = prob_func.h
 
-function_tests.exe : function_tests.c prob_func.c prob_func.h
-	cl function_tests.c prob_func.c
+all : $(exec)
 
-consoleapp.exe : consoleapp.c prob_func.c prob_func.h
-	cl consoleapp.c prob_func.c
+function_tests : function_tests.c $(libdef) $(libhead)
+	$(CXX) $< $(libdef) -o $@
 
-clean :
-	del /f /q *.obj
+consoleapp : consoleapp.c $(libdef) $(libhead)
+	$(CXX) $< $(libdef) -o $@
 
 reset :
-	del /f /q $(output)
+	rm -f $(exec)
