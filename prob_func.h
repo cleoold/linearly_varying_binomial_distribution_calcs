@@ -15,6 +15,9 @@
 #ifndef _PROB_FUNC_H
 #define _PROB_FUNC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef double probability;
 typedef double count; // this is number of successes
@@ -79,4 +82,9 @@ probability have_special_success_within_n_attempts(LVBdistribution *s, int n, pr
     // waiting to add...
     //probability have_m_special_success_within_n_attempts(LVBdistribution *s, int n, int m, probability p);
 
+
+#ifdef __cplusplus
+}
 #endif
+
+#endif // define _PROB_FUNC_H
